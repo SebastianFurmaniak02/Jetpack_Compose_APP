@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Jetpack_Compose_APP</string>
+    <string name="x_square">X<sup>2</sup></string>
+    <string name="square_root_symbol">\u221a</string>
+    <string name="division">\u00F7</string>
+    <string name="multiplication">\u0078</string>
+</resources>
