@@ -7,5 +7,5 @@ data class ParticipantDB(
     val email: String,
     val gender: String,
     val studentStatus: Int,
-    val skillLevel: Int
+    val skillLevel: String
 )

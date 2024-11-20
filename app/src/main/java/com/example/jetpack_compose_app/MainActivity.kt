@@ -4,29 +4,29 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.jetpack_compose_app.fragments.*
-import com.example.jetpack_compose_app.fragments.fragmentDatabase.DatabaseScreen
+import com.example.jetpack_compose_app.fragments.DatabaseScreen
 import com.example.jetpack_compose_app.ui.theme.Jetpack_Compose_APPTheme
 
 
@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Jetpack_Compose_APPTheme {
+            Jetpack_Compose_APPTheme(dynamicColor = false) {
                 val items = listOf(
                     BottomNavigationItem(
                         title = "Calculator",
@@ -52,12 +52,12 @@ class MainActivity : ComponentActivity() {
                         icon = ImageVector.vectorResource(id = R.drawable.ic_action_sensor),
                     ),
                     BottomNavigationItem(
-                        title = "Form",
-                        icon = ImageVector.vectorResource(id = R.drawable.ic_action_form),
-                    ),
-                    BottomNavigationItem(
                         title = "Database",
                         icon = ImageVector.vectorResource(id = R.drawable.ic_action_database),
+                    ),
+                    BottomNavigationItem(
+                        title = "Statistics",
+                        icon = ImageVector.vectorResource(id = R.drawable.ic_action_form),
                     )
                 )
 
@@ -70,7 +70,9 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Scaffold(
                         bottomBar = {
-                            NavigationBar {
+                            NavigationBar(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                            ) {
                                 items.forEachIndexed { index, item ->
                                     NavigationBarItem(
                                         selected = selectedItemIndex == index,
@@ -78,6 +80,9 @@ class MainActivity : ComponentActivity() {
                                             selectedItemIndex = index
                                             navController.navigate(item.title)
                                         },
+                                        colors = NavigationBarItemDefaults.colors(
+                                            indicatorColor = MaterialTheme.colorScheme.background
+                                        ),
                                         alwaysShowLabel = false,
                                         label = { Text(text = item.title) },
                                         icon = {
@@ -98,18 +103,11 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable("Calculator") { CalculatorScreen() }
                         composable("Sensor") { SensorScreen() }
-                        composable("Form") { FormScreen() }
                         composable("Database") { DatabaseScreen() }
+                        composable("Statistics") { StatisticsScreen() }
                     }
                 }
             }
         }
     }
 }
-
-@Preview
-@Composable
-fun SimpleComposablePreview() {
-    CalculatorScreen()
-}
-

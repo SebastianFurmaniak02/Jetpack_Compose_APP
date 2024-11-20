@@ -1,16 +1,21 @@
 package com.example.jetpack_compose_app.fragments
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,11 +26,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.jetpack_compose_app.R
-import com.example.jetpack_compose_app.ui.theme.Purple40
+import com.example.jetpack_compose_app.customComposable.AutoResizedText
+import com.example.jetpack_compose_app.ui.theme.Cyan
 import kotlin.math.sqrt
 
 data class CalculatorScreenInfo(
@@ -52,14 +59,24 @@ fun CalculatorScreen() {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = calculatorScreenInfo.screen.take(20),
-            modifier = Modifier.fillMaxWidth(),
-            color = Purple40,
-            textAlign = TextAlign.End,
-            maxLines = 1,
-            fontSize = 80.sp
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.End)
+            ) {
+            AutoResizedText(
+                text = calculatorScreenInfo.screen.take(20),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+                    .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(15.dp))
+                    .padding(5.dp)
+                    .height(buttonWidth)
+                    .align(Alignment.Bottom),
+                textAlign = TextAlign.End,
+                fontSize = 80.sp
+            )
+        }
         Column (modifier = Modifier.fillMaxHeight()) {
             Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                 Button(
@@ -68,7 +85,7 @@ fun CalculatorScreen() {
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
                     onClick = { calculatorScreenInfo = square(calculatorScreenInfo) }) {
-                    Text(stringResource(id = R.string.x_square))
+                    Text(AnnotatedString("x\u00B2"), fontSize=30.sp)
                 }
                 Button(
                     modifier = Modifier
@@ -76,7 +93,7 @@ fun CalculatorScreen() {
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
                     onClick = { calculatorScreenInfo = squareRoot(calculatorScreenInfo) }) {
-                    Text(stringResource(id = R.string.square_root_symbol))
+                    Text(stringResource(id = R.string.square_root_symbol), fontSize=30.sp)
                 }
                 Button(
                     modifier = Modifier
@@ -84,7 +101,7 @@ fun CalculatorScreen() {
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
                     onClick = { calculatorScreenInfo = clearScreen(calculatorScreenInfo) }) {
-                    Text("C")
+                    Text("C", fontSize=30.sp)
                 }
                 Button(
                     modifier = Modifier
@@ -92,7 +109,7 @@ fun CalculatorScreen() {
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
                     onClick = { calculatorScreenInfo = setSymbolOnScreen("/", calculatorScreenInfo) }) {
-                    Text(stringResource(id = R.string.division))
+                    Text(stringResource(id = R.string.division), fontSize=30.sp)
                 }
             }
             Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
@@ -101,24 +118,36 @@ fun CalculatorScreen() {
                         .size(buttonWidth, buttonWidth)
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary
+                    ),
                     onClick = { calculatorScreenInfo = setNumberOnScreen("1", calculatorScreenInfo) }) {
-                    Text("1")
+                    Text("1", fontSize=30.sp)
                 }
                 Button(
                     modifier = Modifier
                         .size(buttonWidth, buttonWidth)
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary
+                    ),
                     onClick = { calculatorScreenInfo = setNumberOnScreen("2", calculatorScreenInfo) }) {
-                    Text("2")
+                    Text("2", fontSize=30.sp)
                 }
                 Button(
                     modifier = Modifier
                         .size(buttonWidth, buttonWidth)
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary
+                    ),
                     onClick = { calculatorScreenInfo = setNumberOnScreen("3", calculatorScreenInfo) }) {
-                    Text("3")
+                    Text("3", fontSize=30.sp)
                 }
                 Button(
                     modifier = Modifier
@@ -126,7 +155,7 @@ fun CalculatorScreen() {
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
                     onClick = { calculatorScreenInfo = setSymbolOnScreen("*", calculatorScreenInfo) }) {
-                    Text(stringResource(id = R.string.multiplication))
+                    Text(stringResource(id = R.string.multiplication), fontSize=30.sp)
                 }
             }
             Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
@@ -135,24 +164,36 @@ fun CalculatorScreen() {
                         .size(buttonWidth, buttonWidth)
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary
+                    ),
                     onClick = { calculatorScreenInfo = setNumberOnScreen("4", calculatorScreenInfo) }) {
-                    Text("4")
+                    Text("4", fontSize=30.sp)
                 }
                 Button(
                     modifier = Modifier
                         .size(buttonWidth, buttonWidth)
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary
+                    ),
                     onClick = { calculatorScreenInfo = setNumberOnScreen("5", calculatorScreenInfo) }) {
-                    Text("5")
+                    Text("5", fontSize=30.sp)
                 }
                 Button(
                     modifier = Modifier
                         .size(buttonWidth, buttonWidth)
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary
+                    ),
                     onClick = { calculatorScreenInfo = setNumberOnScreen("6", calculatorScreenInfo) }) {
-                    Text("6")
+                    Text("6", fontSize=30.sp)
                 }
                 Button(
                     modifier = Modifier
@@ -160,7 +201,7 @@ fun CalculatorScreen() {
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
                     onClick = { calculatorScreenInfo = setSymbolOnScreen("-", calculatorScreenInfo) }) {
-                    Text("-")
+                    Text("-", fontSize=30.sp)
                 }
             }
             Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
@@ -169,24 +210,36 @@ fun CalculatorScreen() {
                         .size(buttonWidth, buttonWidth)
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary
+                    ),
                     onClick = { calculatorScreenInfo = setNumberOnScreen("7", calculatorScreenInfo) }) {
-                    Text("7")
+                    Text("7", fontSize=30.sp)
                 }
                 Button(
                     modifier = Modifier
                         .size(buttonWidth, buttonWidth)
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary
+                    ),
                     onClick = { calculatorScreenInfo = setNumberOnScreen("8", calculatorScreenInfo) }) {
-                    Text("8")
+                    Text("8", fontSize=30.sp)
                 }
                 Button(
                     modifier = Modifier
                         .size(buttonWidth, buttonWidth)
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary
+                    ),
                     onClick = { calculatorScreenInfo = setNumberOnScreen("9", calculatorScreenInfo) }) {
-                    Text("9")
+                    Text("9", fontSize=30.sp)
                 }
                 Button(
                     modifier = Modifier
@@ -194,7 +247,7 @@ fun CalculatorScreen() {
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
                     onClick = { calculatorScreenInfo = setSymbolOnScreen("+", calculatorScreenInfo) }) {
-                    Text("+")
+                    Text("+", fontSize=30.sp)
                 }
             }
             Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
@@ -203,16 +256,20 @@ fun CalculatorScreen() {
                         .size(buttonWidth, buttonWidth)
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
-                    onClick = { calculatorScreenInfo = changeSign(calculatorScreenInfo) }) {
-                    Text("+/-")
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary,
+                        contentColor = MaterialTheme.colorScheme.onTertiary
+                    ),
+                    onClick = { calculatorScreenInfo = setNumberOnScreen("0", calculatorScreenInfo) }) {
+                    Text("0", fontSize=30.sp)
                 }
                 Button(
                     modifier = Modifier
                         .size(buttonWidth, buttonWidth)
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
-                    onClick = { calculatorScreenInfo = setNumberOnScreen("0", calculatorScreenInfo) }) {
-                    Text("0")
+                    onClick = { calculatorScreenInfo = changeSign(calculatorScreenInfo) }) {
+                    Text("+/-", fontSize=25.sp, maxLines = 1)
                 }
                 Button(
                     modifier = Modifier
@@ -220,7 +277,7 @@ fun CalculatorScreen() {
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
                     onClick = { calculatorScreenInfo = setSymbolOnScreen(".", calculatorScreenInfo) }) {
-                    Text(".")
+                    Text(".", fontSize=30.sp)
                 }
                 Button(
                     modifier = Modifier
@@ -228,7 +285,7 @@ fun CalculatorScreen() {
                         .padding(2.dp),
                     shape = RoundedCornerShape(15.dp),
                     onClick = { calculatorScreenInfo = calculateResult(calculatorScreenInfo) }) {
-                    Text("=")
+                    Text("=", fontSize=30.sp)
                 }
             }
         }
@@ -317,9 +374,13 @@ private fun square(calculatorScreenInfo: CalculatorScreenInfo) : CalculatorScree
 
 private fun calculateResult(calculatorScreenInfo: CalculatorScreenInfo) : CalculatorScreenInfo {
 
-    if (calculatorScreenInfo.isLastSymbol) return calculatorScreenInfo
+    if (calculatorScreenInfo.isLastSymbol || calculatorScreenInfo.isResult) return calculatorScreenInfo
 
-    var screen = calculatorScreenInfo.screen.replace("--","-~").replace("+-","+~").replace("/-","/~").replace("*-","*~")
+    var screen = calculatorScreenInfo.screen
+        .replace("--","-~")
+        .replace("+-","+~")
+        .replace("/-","/~")
+        .replace("*-","*~")
     if (screen.startsWith("-")) {
         screen = screen.removePrefix("-")
         screen = "~$screen"

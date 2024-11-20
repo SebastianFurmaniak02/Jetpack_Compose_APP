@@ -8,58 +8,134 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.jetpack_compose_app.R
 
 @Composable
 fun SensorScreen() {
     val image = ImageBitmap.imageResource(R.drawable.ic_action_sun)
     var imageSun by remember { mutableStateOf(image) }
+    var progress by remember { mutableFloatStateOf(0.0F) }
+    var textProgress by remember { mutableStateOf("0%") }
     val context = LocalContext.current
+    val pixels = context.resources.displayMetrics.widthPixels
+    val density = context.resources.displayMetrics.density
+    val width = (pixels/density).dp
 
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            modifier = Modifier.fillMaxSize(),
-            bitmap = imageSun,
-            contentDescription = ""
+        Text(
+            text = "Sensor",
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.primary, RectangleShape)
+                .padding(vertical = 5.dp),
+            textAlign = TextAlign.Center,
+            maxLines = 1,
+            fontSize = 25.sp
         )
-    }
-    DisposableEffect(Unit) {
-        val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        val sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
-        val sensorListener = object : SensorEventListener {
-            override fun onSensorChanged(event: SensorEvent?) {
-                val brightness = event!!.values[0] * (160/50) - 80
-                imageSun = setBrightness(image.asAndroidBitmap(), -brightness.toInt())?.asImageBitmap()
-                    ?: imageSun
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    modifier = Modifier
+                        .width(width / 2)
+                        .height(width / 2),
+                    bitmap = imageSun,
+                    contentDescription = ""
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp)
+                        .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(15.dp))
+                        .padding(10.dp)
+                ) {
+                    Text(
+                        text = "Output:",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        fontSize = 25.sp
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    LinearProgressIndicator(
+                        progress = progress,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = textProgress,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        fontSize = 25.sp
+                    )
+                }
             }
+            DisposableEffect(Unit) {
+                val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+                val sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT)
+                val sensorListener = object : SensorEventListener {
+                    override fun onSensorChanged(event: SensorEvent?) {
+                        val sensorOutput = event!!.values[0]
+                        val brightness = if (sensorOutput>= 10000) 110f else (sensorOutput* 160/10000) - 50
+                        val percentageOutput = ((brightness + 50) * 100 / 160)
+                        progress = (percentageOutput/100)
+                        textProgress = "${percentageOutput.toInt()}%"
+                        imageSun = setBrightness(image.asAndroidBitmap(), -brightness.toInt())?.asImageBitmap()
+                            ?: imageSun
+                    }
 
-            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+                    }
+                }
+                sensorManager.registerListener(sensorListener, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+
+                onDispose {
+                    sensorManager.unregisterListener(sensorListener)
+                }
             }
-        }
-        sensorManager.registerListener(sensorListener, sensor, SensorManager.SENSOR_DELAY_NORMAL)
-
-        onDispose {
-            sensorManager.unregisterListener(sensorListener)
         }
     }
 }
