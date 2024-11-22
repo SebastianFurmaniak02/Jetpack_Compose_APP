@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -35,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -55,27 +57,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.jetpack_compose_app.R
 import com.example.jetpack_compose_app.database.DatabaseHandler
 import com.example.jetpack_compose_app.database.ParticipantDB
 import com.example.jetpack_compose_app.ui.theme.Jetpack_Compose_APPTheme
+import com.example.jetpack_compose_app.viewModel.DialogInfo
+import com.example.jetpack_compose_app.viewModel.FormScreenInfo
+import com.example.jetpack_compose_app.viewModel.FormViewModel
 import org.jetbrains.annotations.Nullable
 
-
-data class DialogInfo(
-    var isDialog: Boolean = false,
-    var dialogNumber: Int = 0
-    )
 class FormActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Jetpack_Compose_APPTheme(dynamicColor = false) {
+                val formViewModel: FormViewModel = viewModel()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    FormScreen()
+                    FormScreen(formViewModel)
                 }
             }
         }
@@ -83,16 +85,13 @@ class FormActivity : ComponentActivity() {
 }
 
 @Composable
-fun FormScreen() {
+fun FormScreen(formViewModel: FormViewModel) {
     val context = LocalContext.current
-    var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var selectedIndex by remember { mutableIntStateOf(0) }
+    val formScreenInfo by remember(formViewModel) {
+        formViewModel.formScreenInfo
+    }.collectAsState()
+
     val radioButtonGroupOptions = listOf("Male", "Female")
-    var studentStatus by remember { mutableStateOf(false) }
-    var skillLevel by remember { mutableIntStateOf(0) }
-    var dialogInfo by remember { mutableStateOf(DialogInfo()) }
     val paddingVertical = 5.dp
     val paddingHorizontal = 10.dp
     val focusManager = LocalFocusManager.current
@@ -136,183 +135,204 @@ fun FormScreen() {
                 )
             }
         }
-        TextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = paddingVertical),
-            value = firstName,
-            onValueChange = { firstName = it },
-            singleLine = true,
-            label = {
-                Text("First name")
-            },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions(
-                onNext = { focusManager.moveFocus(FocusDirection.Down) }
-            )
-        )
-        TextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = paddingVertical),
-            value = lastName,
-            singleLine = true,
-            onValueChange = { lastName = it },
-            label = {
-                Text("Last name")
-            },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
-            ),
-            keyboardActions = KeyboardActions(
-                onNext = { focusManager.moveFocus(FocusDirection.Down) }
-            )
-        )
-        TextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = paddingVertical),
-            value = email,
-            singleLine = true,
-            onValueChange = { email = it },
-            label = {
-                Text("Email")
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Done
-            ),
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = paddingHorizontal)
-                .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(15.dp)),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text("Gender", textAlign = TextAlign.Start, fontSize = 20.sp)
-            radioButtonGroupOptions.forEachIndexed { index, label ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    RadioButton(
-                        selected = (selectedIndex == index),
-                        onClick = {
-                            selectedIndex = index
-                        },
+
+        LazyColumn(Modifier.fillMaxWidth()) {
+            item {
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = paddingVertical),
+                    value = formScreenInfo.firstName,
+                    onValueChange = { formViewModel.updateFirstName(it) },
+                    singleLine = true,
+                    label = {
+                        Text("First name")
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
                     )
-                    Text(text = label, fontSize = 15.sp)
-                }
-            }
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = paddingHorizontal, vertical = paddingVertical)
-                .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(15.dp))
-                .padding(horizontal = paddingHorizontal),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Student status",
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Switch(
-                checked = studentStatus,
-                onCheckedChange = {
-                    studentStatus = it
-                }
-            )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = paddingHorizontal,
-                    end = paddingHorizontal,
-                    bottom = paddingVertical
-                )
-                .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(15.dp))
-                .padding(
-                    start = paddingHorizontal,
-                    end = paddingHorizontal,
-                    bottom = paddingVertical
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = "Skill level", fontSize = 20.sp)
-            Slider(
-                modifier = Modifier.padding(horizontal = paddingVertical),
-                value = skillLevel.toFloat(),
-                onValueChange = {
-                    skillLevel = it.toInt()
-                },
-                colors = SliderDefaults.colors(
-                    thumbColor = MaterialTheme.colorScheme.primary,
-                    activeTrackColor = MaterialTheme.colorScheme.primary,
-                    inactiveTrackColor = MaterialTheme.colorScheme.onPrimary,
-                ),
-                steps = 3,
-                valueRange = 0f..4f
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = paddingHorizontal),
-                horizontalArrangement = Arrangement.Start
-            ) {
-                Text(
-                    text = "Beginner",
-                    fontSize = 15.sp,
-                    modifier = Modifier.alignByBaseline()
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = "Advanced",
-                    fontSize = 15.sp,
-                    modifier = Modifier.alignByBaseline()
                 )
             }
-        }
-        Row(modifier = Modifier.fillMaxSize()) {
-            Spacer(modifier = Modifier.weight(1f))
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(2f),
-                onClick = {
-                    dialogInfo = if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty())
-                        DialogInfo(true, 0)
-                    else if (!Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches())
-                        DialogInfo(true, 1)
-                    else {
-                        DialogInfo(true, 2)
+            item {
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = paddingVertical),
+                    value = formScreenInfo.lastName,
+                    singleLine = true,
+                    onValueChange = { formViewModel.updateLastName(it)},
+                    label = {
+                        Text("Last name")
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    )
+                )
+            }
+            item {
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = paddingVertical),
+                    value = formScreenInfo.lastName,
+                    singleLine = true,
+                    onValueChange = { formViewModel.updateLastName(it)},
+                    label = {
+                        Text("Last name")
+                    },
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    )
+                )
+            }
+            item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = paddingHorizontal)
+                        .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(15.dp)),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text("Gender", textAlign = TextAlign.Start, fontSize = 20.sp)
+                    radioButtonGroupOptions.forEachIndexed { index, label ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = (formScreenInfo.selectedIndex == index),
+                                onClick = {
+                                    formViewModel.updateGender(index)
+                                },
+                            )
+                            Text(text = label, fontSize = 15.sp)
+                        }
                     }
                 }
-            ) {
-                Text("Send", fontSize = 20.sp)
             }
-            Spacer(modifier = Modifier.weight(1f))
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = paddingHorizontal, vertical = paddingVertical)
+                        .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(15.dp))
+                        .padding(horizontal = paddingHorizontal),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Student status",
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Switch(
+                        checked = formScreenInfo.studentStatus,
+                        onCheckedChange = {
+                            formViewModel.toggleStudentStatus(it)
+                        }
+                    )
+                }
+            }
+            item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            start = paddingHorizontal,
+                            end = paddingHorizontal,
+                            bottom = paddingVertical
+                        )
+                        .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(15.dp))
+                        .padding(
+                            start = paddingHorizontal,
+                            end = paddingHorizontal,
+                            bottom = paddingVertical
+                        ),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = "Skill level", fontSize = 20.sp)
+                    Slider(
+                        modifier = Modifier.padding(horizontal = paddingVertical),
+                        value = formScreenInfo.skillLevel.toFloat(),
+                        onValueChange = {
+                            formViewModel.updateSkillLevel(it.toInt())
+                        },
+                        colors = SliderDefaults.colors(
+                            thumbColor = MaterialTheme.colorScheme.primary,
+                            activeTrackColor = MaterialTheme.colorScheme.primary,
+                            inactiveTrackColor = MaterialTheme.colorScheme.onPrimary,
+                        ),
+                        steps = 3,
+                        valueRange = 0f..4f
+                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = paddingHorizontal),
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        Text(
+                            text = "Beginner",
+                            fontSize = 15.sp,
+                            modifier = Modifier.alignByBaseline()
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = "Advanced",
+                            fontSize = 15.sp,
+                            modifier = Modifier.alignByBaseline()
+                        )
+                    }
+                }
+            }
+            item {
+                Row(modifier = Modifier.fillMaxSize()) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(2f)
+                            .padding(paddingHorizontal),
+                        onClick = {
+                            formViewModel.updateDialog(
+                                if  (formScreenInfo.firstName.isEmpty() || formScreenInfo.lastName.isEmpty() || formScreenInfo.email.isEmpty())
+                                    DialogInfo(true, 0)
+                                else if (!Patterns.EMAIL_ADDRESS.matcher(formScreenInfo.email.trim()).matches())
+                                    DialogInfo(true, 1)
+                                else {
+                                    DialogInfo(true, 2)
+                                }
+                            )
+                        }
+                    ) {
+                        Text("Send", fontSize = 20.sp)
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
         }
-
-        if (dialogInfo.isDialog) {
+        if (formScreenInfo.dialogInfo.isDialog) {
             AlertDialog(
                 onDismissRequest = {
-                    if (dialogInfo.dialogNumber == 2) {
+                    if (formScreenInfo.dialogInfo.dialogNumber == 2) {
                         val participant = ParticipantDB(
                             id = null,
-                            firstName = firstName,
-                            lastName = lastName,
-                            email = email,
-                            gender = radioButtonGroupOptions[selectedIndex],
+                            firstName = formScreenInfo.firstName,
+                            lastName = formScreenInfo.lastName,
+                            email = formScreenInfo.email,
+                            gender = radioButtonGroupOptions[formScreenInfo.selectedIndex],
                             studentStatus = when {
-                                studentStatus -> 1
+                                formScreenInfo.studentStatus -> 1
                                 else -> 0
                             },
-                            skillLevel = when (skillLevel) {
+                            skillLevel = when (formScreenInfo.skillLevel) {
                                 0 -> "Beginner"
                                 1 -> "Novice"
                                 2 -> "Intermediate"
@@ -323,11 +343,11 @@ fun FormScreen() {
                         if (context is Activity)
                             context.finish()
                     }
-                    dialogInfo.isDialog = false
+                    formViewModel.updateDialog(DialogInfo(false,0))
                 },
                 text = {
                     Text(
-                        when (dialogInfo.dialogNumber) {
+                        when (formScreenInfo.dialogInfo.dialogNumber) {
                             0 -> "Some fields are empty."
                             1 -> "invalid email address."
                             else -> "The form has been sent."
@@ -337,18 +357,18 @@ fun FormScreen() {
                 confirmButton = {
                     TextButton(
                         onClick = {
-                            if (dialogInfo.dialogNumber == 2) {
+                            if (formScreenInfo.dialogInfo.dialogNumber == 2) {
                                 val participant = ParticipantDB(
                                     id = null,
-                                    firstName = firstName,
-                                    lastName = lastName,
-                                    email = email,
-                                    gender = radioButtonGroupOptions[selectedIndex],
+                                    firstName = formScreenInfo.firstName,
+                                    lastName = formScreenInfo.lastName,
+                                    email = formScreenInfo.email,
+                                    gender = radioButtonGroupOptions[formScreenInfo.selectedIndex],
                                     studentStatus = when {
-                                        studentStatus -> 1
+                                        formScreenInfo.studentStatus -> 1
                                         else -> 0
                                     },
-                                    skillLevel = when (skillLevel) {
+                                    skillLevel = when (formScreenInfo.skillLevel) {
                                         0 -> "Beginner"
                                         1 -> "Novice"
                                         2 -> "Intermediate"
@@ -359,21 +379,12 @@ fun FormScreen() {
                                 if (context is Activity)
                                     context.finish()
                             }
-                            dialogInfo = DialogInfo(false,0)
+                            formViewModel.updateDialog(DialogInfo(false,0))
                         }) {
                         Text("OK")
                     }
                 },
             )
         }
-
     }
 }
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
-    Jetpack_Compose_APPTheme(dynamicColor = false) {
-        FormScreen()
-    }
-}
-

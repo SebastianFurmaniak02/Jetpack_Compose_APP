@@ -38,7 +38,7 @@ fun AutoResizedText(
         },
         softWrap = false,
         onTextLayout = { result ->
-            if(result.didOverflowWidth) {
+            if(result.didOverflowWidth || result.didOverflowHeight) {
                 if(style.fontSize.isUnspecified) {
                     resizedTextStyle = resizedTextStyle.copy(
                         fontSize = fontSize

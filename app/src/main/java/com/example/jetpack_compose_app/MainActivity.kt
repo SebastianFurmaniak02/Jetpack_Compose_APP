@@ -4,12 +4,10 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
@@ -22,13 +20,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.jetpack_compose_app.fragments.*
 import com.example.jetpack_compose_app.fragments.DatabaseScreen
 import com.example.jetpack_compose_app.ui.theme.Jetpack_Compose_APPTheme
-
+import com.example.jetpack_compose_app.viewModel.CalculatorViewModel
 
 
 data class BottomNavigationItem(
@@ -40,8 +39,13 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         setContent {
             Jetpack_Compose_APPTheme(dynamicColor = false) {
+
+                val calculatorViewModel: CalculatorViewModel = viewModel()
+
                 val items = listOf(
                     BottomNavigationItem(
                         title = "Calculator",
@@ -57,7 +61,7 @@ class MainActivity : ComponentActivity() {
                     ),
                     BottomNavigationItem(
                         title = "Statistics",
-                        icon = ImageVector.vectorResource(id = R.drawable.ic_action_form),
+                        icon = ImageVector.vectorResource(id = R.drawable.ic_action_statistics),
                     )
                 )
 
@@ -81,7 +85,7 @@ class MainActivity : ComponentActivity() {
                                             navController.navigate(item.title)
                                         },
                                         colors = NavigationBarItemDefaults.colors(
-                                            indicatorColor = MaterialTheme.colorScheme.background
+                                            indicatorColor = MaterialTheme.colorScheme.tertiary
                                         ),
                                         alwaysShowLabel = false,
                                         label = { Text(text = item.title) },
@@ -101,7 +105,7 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         startDestination = "Calculator",
                     ) {
-                        composable("Calculator") { CalculatorScreen() }
+                        composable("Calculator") { CalculatorScreen(calculatorViewModel) }
                         composable("Sensor") { SensorScreen() }
                         composable("Database") { DatabaseScreen() }
                         composable("Statistics") { StatisticsScreen() }

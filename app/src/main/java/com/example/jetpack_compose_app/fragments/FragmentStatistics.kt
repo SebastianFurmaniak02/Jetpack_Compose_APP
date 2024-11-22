@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -16,6 +17,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.jetpack_compose_app.customComposable.AnimatedProgressBar
 import com.example.jetpack_compose_app.database.DatabaseHandler
+
+
 
 @Composable
 fun StatisticsScreen() {
@@ -91,123 +95,93 @@ fun StatisticsScreen() {
                 val genders = listOf("Male", "Female")
                 val skillLevels = listOf("Beginner", "Novice", "Intermediate", "Proficient", "Advanced")
 
-                Column (
-                    modifier = Modifier.fillMaxWidth()
+                LazyColumn (
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 100.dp)
                 ) {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
-                        shape = RoundedCornerShape(15.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiary),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-                    ) {
-                        Column(
+                    item {
+                        Card(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(15.dp),
-                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                                .padding(10.dp),
+                            shape = RoundedCornerShape(15.dp),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiary),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                         ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(15.dp),
+                                verticalArrangement = Arrangement.spacedBy(10.dp)
                             ) {
-                                Text(
-                                    text = "Male total: ",
-                                    fontSize = 16.sp
-                                )
-                                Text(
-                                    text = participants.count {
-                                        it.gender == genders[0]
-                                    }.toString(),
-                                    fontSize = 16.sp
-                                )
-                            }
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text(
-                                    text = "Female total: ",
-                                    fontSize = 16.sp
-                                )
-                                Text(
-                                    text = participants.count {
-                                        it.gender == genders[1]
-                                    }.toString(),
-                                    fontSize = 16.sp
-                                )
-                            }
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text(
-                                    text = "Students total: ",
-                                    fontSize = 16.sp
-                                )
-                                Text(
-                                    text = participants.count {
-                                        it.studentStatus == 1
-                                    }.toString(),
-                                    fontSize = 16.sp
-                                )
-                            }
-                        }
-                    }
-
-
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(15.dp))
-                            .padding(15.dp)
-                    ) {
-                        Column {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceEvenly
-                            ) {
-                                Text(
-                                    text = "",
-                                    modifier = Modifier
-                                        .weight(columnWeight2),
-                                )
-                                for (skillLevel in skillLevels) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
                                     Text(
-                                        text = "${skillLevel.take(3)}.",
-                                        modifier = Modifier
-                                            .border(
-                                                0.5.dp,
-                                                Color.Black,
-                                                RectangleShape
-                                            )
-                                            .weight(columnWeight1),
+                                        text = "Male total: ",
+                                        fontSize = 16.sp
+                                    )
+                                    Text(
+                                        text = participants.count {
+                                            it.gender == genders[0]
+                                        }.toString(),
+                                        fontSize = 16.sp
+                                    )
+                                }
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        text = "Female total: ",
+                                        fontSize = 16.sp
+                                    )
+                                    Text(
+                                        text = participants.count {
+                                            it.gender == genders[1]
+                                        }.toString(),
+                                        fontSize = 16.sp
+                                    )
+                                }
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        text = "Students total: ",
+                                        fontSize = 16.sp
+                                    )
+                                    Text(
+                                        text = participants.count {
+                                            it.studentStatus == 1
+                                        }.toString(),
+                                        fontSize = 16.sp
                                     )
                                 }
                             }
-                            for (gender in genders) {
+                        }
+                    }
+                    item {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(15.dp))
+                                .padding(15.dp)
+                        ) {
+                            Column {
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.SpaceEvenly
                                 ) {
                                     Text(
-                                        text = gender,
+                                        text = "",
                                         modifier = Modifier
-                                            .border(
-                                                0.5.dp,
-                                                Color.Black,
-                                                RectangleShape
-                                            )
                                             .weight(columnWeight2),
                                     )
                                     for (skillLevel in skillLevels) {
-                                        val count = participants.count {
-                                            it.gender == gender && it.skillLevel == skillLevel
-                                        }
                                         Text(
-                                            text = count.toString(),
+                                            text = "${skillLevel.take(3)}.",
                                             modifier = Modifier
                                                 .border(
                                                     0.5.dp,
@@ -216,6 +190,38 @@ fun StatisticsScreen() {
                                                 )
                                                 .weight(columnWeight1),
                                         )
+                                    }
+                                }
+                                for (gender in genders) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceEvenly
+                                    ) {
+                                        Text(
+                                            text = gender,
+                                            modifier = Modifier
+                                                .border(
+                                                    0.5.dp,
+                                                    Color.Black,
+                                                    RectangleShape
+                                                )
+                                                .weight(columnWeight2),
+                                        )
+                                        for (skillLevel in skillLevels) {
+                                            val count = participants.count {
+                                                it.gender == gender && it.skillLevel == skillLevel
+                                            }
+                                            Text(
+                                                text = count.toString(),
+                                                modifier = Modifier
+                                                    .border(
+                                                        0.5.dp,
+                                                        Color.Black,
+                                                        RectangleShape
+                                                    )
+                                                    .weight(columnWeight1),
+                                            )
+                                        }
                                     }
                                 }
                             }
