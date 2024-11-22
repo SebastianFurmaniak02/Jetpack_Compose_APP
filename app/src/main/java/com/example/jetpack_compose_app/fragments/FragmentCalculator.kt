@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.jetpack_compose_app.R
 import com.example.jetpack_compose_app.customComposable.AutoResizedText
-import com.example.jetpack_compose_app.ui.theme.Cyan
 import com.example.jetpack_compose_app.viewModel.CalculatorViewModel
 import kotlin.math.sqrt
 
