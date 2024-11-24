@@ -229,7 +229,7 @@ fun FormScreen(formViewModel: FormViewModel) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Student status",
+                        text = "Student status", fontSize = 15.sp
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     Switch(
