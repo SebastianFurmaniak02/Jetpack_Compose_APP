@@ -1,5 +1,6 @@
 package com.example.jetpack_compose_app.fragments
 
+import android.widget.TableLayout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -161,6 +162,12 @@ fun StatisticsScreen() {
                             }
                         }
                     }
+
+                    item{
+
+
+                    }
+
                     item {
                         Box(
                             contentAlignment = Alignment.Center,

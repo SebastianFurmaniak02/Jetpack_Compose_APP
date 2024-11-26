@@ -27,6 +27,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -64,6 +65,21 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.primary, RectangleShape)
+                .padding(5.dp)
+        ) {
+            Text(
+                text = "Calculator",
+                modifier = Modifier
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                fontSize = 25.sp
+            )
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -72,7 +88,10 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
             AutoResizedText(
                 text = calculatorScreenInfo.screen.take(20),
                 modifier = Modifier
-                    .fillMaxWidth().height(100.dp)
+                    .fillMaxWidth().height(
+                        if (isLandscape) 80.dp
+                        else 100.dp
+                    )
                     .padding(5.dp)
                     .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(15.dp))
                     .padding(5.dp)
@@ -295,7 +314,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
         } else {
             Row (modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 100.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
+                .padding(bottom = 85.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
                 Column(modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f), verticalArrangement = Arrangement.SpaceEvenly) {

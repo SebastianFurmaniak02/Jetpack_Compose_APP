@@ -84,8 +84,8 @@ fun ScreenParticipantDetails(participant: ParticipantDB) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 5.dp)
-                .background(MaterialTheme.colorScheme.tertiary, RectangleShape)
+                .padding(bottom = 5.dp)
+                .background(MaterialTheme.colorScheme.secondary, RectangleShape)
                 .padding(5.dp)
         ) {
             Text(

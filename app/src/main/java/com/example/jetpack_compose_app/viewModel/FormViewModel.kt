@@ -44,7 +44,7 @@ class FormViewModel : ViewModel() {
         _formScreenInfo.value = _formScreenInfo.value.copy(selectedIndex = index)
     }
 
-    fun toggleStudentStatus(isStudent: Boolean) {
+    fun updateStudentStatus(isStudent: Boolean) {
         _formScreenInfo.value = _formScreenInfo.value.copy(studentStatus = isStudent)
     }
 

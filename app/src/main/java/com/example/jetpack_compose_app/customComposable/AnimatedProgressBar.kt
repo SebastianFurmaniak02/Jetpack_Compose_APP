@@ -29,7 +29,7 @@ fun AnimatedProgressBar(
     percentage: Float,
     number: Int,
     fontSize: TextUnit = 28.sp,
-    radius: Dp = 50.dp,
+    radius: Dp = 100.dp,
     color: Color = MaterialTheme.colorScheme.primary,
     fontColor: Color = MaterialTheme.colorScheme.onPrimary,
     strokeWidth: Dp = 8.dp,

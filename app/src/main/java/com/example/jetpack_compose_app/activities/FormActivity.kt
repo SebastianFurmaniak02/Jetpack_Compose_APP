@@ -126,7 +126,7 @@ fun FormScreen(formViewModel: FormViewModel) {
                 },
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Icon (
+                Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.baseline_keyboard_backspace_24),
                     modifier = Modifier
                         .size(40.dp),
@@ -163,7 +163,7 @@ fun FormScreen(formViewModel: FormViewModel) {
                         .padding(bottom = paddingVertical),
                     value = formScreenInfo.lastName,
                     singleLine = true,
-                    onValueChange = { formViewModel.updateLastName(it)},
+                    onValueChange = { formViewModel.updateLastName(it) },
                     label = {
                         Text("Last name")
                     },
@@ -182,9 +182,9 @@ fun FormScreen(formViewModel: FormViewModel) {
                         .padding(bottom = paddingVertical),
                     value = formScreenInfo.lastName,
                     singleLine = true,
-                    onValueChange = { formViewModel.updateLastName(it)},
+                    onValueChange = { formViewModel.updateEmail(it) },
                     label = {
-                        Text("Last name")
+                        Text("Email")
                     },
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Next
@@ -235,7 +235,7 @@ fun FormScreen(formViewModel: FormViewModel) {
                     Switch(
                         checked = formScreenInfo.studentStatus,
                         onCheckedChange = {
-                            formViewModel.toggleStudentStatus(it)
+                            formViewModel.updateStudentStatus(it)
                         }
                     )
                 }
@@ -302,9 +302,11 @@ fun FormScreen(formViewModel: FormViewModel) {
                             .padding(paddingHorizontal),
                         onClick = {
                             formViewModel.updateDialog(
-                                if  (formScreenInfo.firstName.isEmpty() || formScreenInfo.lastName.isEmpty() || formScreenInfo.email.isEmpty())
+                                if (formScreenInfo.firstName.isEmpty() || formScreenInfo.lastName.isEmpty() || formScreenInfo.email.isEmpty())
                                     DialogInfo(true, 0)
-                                else if (!Patterns.EMAIL_ADDRESS.matcher(formScreenInfo.email.trim()).matches())
+                                else if (!Patterns.EMAIL_ADDRESS.matcher(formScreenInfo.email.trim())
+                                        .matches()
+                                )
                                     DialogInfo(true, 1)
                                 else {
                                     DialogInfo(true, 2)
@@ -337,13 +339,14 @@ fun FormScreen(formViewModel: FormViewModel) {
                                 1 -> "Novice"
                                 2 -> "Intermediate"
                                 3 -> "Proficient"
-                                else -> "Advanced" }
+                                else -> "Advanced"
+                            }
                         )
                         DatabaseHandler(context).insertData(participant)
                         if (context is Activity)
                             context.finish()
                     }
-                    formViewModel.updateDialog(DialogInfo(false,0))
+                    formViewModel.updateDialog(DialogInfo(false, 0))
                 },
                 text = {
                     Text(
@@ -373,13 +376,14 @@ fun FormScreen(formViewModel: FormViewModel) {
                                         1 -> "Novice"
                                         2 -> "Intermediate"
                                         3 -> "Proficient"
-                                        else -> "Advanced" }
+                                        else -> "Advanced"
+                                    }
                                 )
                                 DatabaseHandler(context).insertData(participant)
                                 if (context is Activity)
                                     context.finish()
                             }
-                            formViewModel.updateDialog(DialogInfo(false,0))
+                            formViewModel.updateDialog(DialogInfo(false, 0))
                         }) {
                         Text("OK")
                     }
