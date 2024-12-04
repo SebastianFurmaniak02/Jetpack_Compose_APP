@@ -52,16 +52,10 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
         isLandscape = true
     }
 
-    val pixels =
-        if (isLandscape) LocalContext.current.resources.displayMetrics.heightPixels
-        else LocalContext.current.resources.displayMetrics.widthPixels
-
-    val density = LocalContext.current.resources.displayMetrics.density
-    val buttonSize = if (isLandscape) ((pixels/density - 8)/4).dp - 30.dp
-            else ((pixels/density)/4).dp - 4.dp
-
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 85.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -88,7 +82,8 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
             AutoResizedText(
                 text = calculatorScreenInfo.screen.take(20),
                 modifier = Modifier
-                    .fillMaxWidth().height(
+                    .fillMaxWidth()
+                    .height(
                         if (isLandscape) 80.dp
                         else 100.dp
                     )
@@ -101,220 +96,242 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
             )
         }
         if(!isLandscape) {
-            Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    onClick = { calculatorViewModel.square() }) {
-                    AutoResizedText(AnnotatedString("x\u00B2").toString(), fontSize=30.sp)
+            Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.SpaceEvenly) {
+                Row (modifier = Modifier.fillMaxWidth().weight(1f), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        onClick = { calculatorViewModel.square() }) {
+                        AutoResizedText(AnnotatedString("x\u00B2").toString(), fontSize=60.sp)
+                    }
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        onClick = { calculatorViewModel.squareRoot() }) {
+                        AutoResizedText(stringResource(id = R.string.square_root_symbol), fontSize=60.sp)
+                    }
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        onClick = { calculatorViewModel.clearScreen() }) {
+                        AutoResizedText("C", fontSize=60.sp)
+                    }
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        onClick = { calculatorViewModel.setSymbolOnScreen("/") }) {
+                        AutoResizedText(stringResource(id = R.string.division), fontSize=60.sp)
+                    }
                 }
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    onClick = { calculatorViewModel.squareRoot() }) {
-                    AutoResizedText(stringResource(id = R.string.square_root_symbol), fontSize=30.sp)
+                Row (modifier = Modifier.fillMaxWidth().weight(1f), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiary,
+                            contentColor = MaterialTheme.colorScheme.onTertiary
+                        ),
+                        onClick = { calculatorViewModel.setNumberOnScreen("1") }) {
+                        AutoResizedText("1", fontSize=60.sp)
+                    }
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiary,
+                            contentColor = MaterialTheme.colorScheme.onTertiary
+                        ),
+                        onClick = { calculatorViewModel.setNumberOnScreen("2") }) {
+                        AutoResizedText("2", fontSize=60.sp)
+                    }
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiary,
+                            contentColor = MaterialTheme.colorScheme.onTertiary
+                        ),
+                        onClick = { calculatorViewModel.setNumberOnScreen("3") }) {
+                        AutoResizedText("3", fontSize=60.sp)
+                    }
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        onClick = { calculatorViewModel.setSymbolOnScreen("*") }) {
+                        AutoResizedText(stringResource(id = R.string.multiplication), fontSize=60.sp)
+                    }
                 }
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    onClick = { calculatorViewModel.clearScreen() }) {
-                    AutoResizedText("C", fontSize=30.sp)
+                Row (modifier = Modifier.fillMaxWidth().weight(1f), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiary,
+                            contentColor = MaterialTheme.colorScheme.onTertiary
+                        ),
+                        onClick = { calculatorViewModel.setNumberOnScreen("4") }) {
+                        AutoResizedText("4", fontSize=60.sp)
+                    }
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiary,
+                            contentColor = MaterialTheme.colorScheme.onTertiary
+                        ),
+                        onClick = { calculatorViewModel.setNumberOnScreen("5") }) {
+                        AutoResizedText("5", fontSize=60.sp)
+                    }
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiary,
+                            contentColor = MaterialTheme.colorScheme.onTertiary
+                        ),
+                        onClick = { calculatorViewModel.setNumberOnScreen("6") }) {
+                        AutoResizedText("6", fontSize=60.sp)
+                    }
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        onClick = { calculatorViewModel.setSymbolOnScreen("-") }) {
+                        AutoResizedText("-", fontSize=60.sp)
+                    }
                 }
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    onClick = { calculatorViewModel.setSymbolOnScreen("/") }) {
-                    AutoResizedText(stringResource(id = R.string.division), fontSize=30.sp)
+                Row (modifier = Modifier.fillMaxWidth().weight(1f), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiary,
+                            contentColor = MaterialTheme.colorScheme.onTertiary
+                        ),
+                        onClick = { calculatorViewModel.setNumberOnScreen("7") }) {
+                        AutoResizedText("7", fontSize=60.sp)
+                    }
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiary,
+                            contentColor = MaterialTheme.colorScheme.onTertiary
+                        ),
+                        onClick = { calculatorViewModel.setNumberOnScreen("8") }) {
+                        AutoResizedText("8", fontSize=60.sp)
+                    }
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiary,
+                            contentColor = MaterialTheme.colorScheme.onTertiary
+                        ),
+                        onClick = { calculatorViewModel.setNumberOnScreen("9") }) {
+                        AutoResizedText("9", fontSize=60.sp)
+                    }
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        onClick = { calculatorViewModel.setSymbolOnScreen("+") }) {
+                        AutoResizedText("+", fontSize=60.sp)
+                    }
                 }
-            }
-            Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        contentColor = MaterialTheme.colorScheme.onTertiary
-                    ),
-                    onClick = { calculatorViewModel.setNumberOnScreen("1") }) {
-                    AutoResizedText("1", fontSize=30.sp)
-                }
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        contentColor = MaterialTheme.colorScheme.onTertiary
-                    ),
-                    onClick = { calculatorViewModel.setNumberOnScreen("2") }) {
-                    AutoResizedText("2", fontSize=30.sp)
-                }
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        contentColor = MaterialTheme.colorScheme.onTertiary
-                    ),
-                    onClick = { calculatorViewModel.setNumberOnScreen("3") }) {
-                    AutoResizedText("3", fontSize=30.sp)
-                }
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    onClick = { calculatorViewModel.setSymbolOnScreen("*") }) {
-                    AutoResizedText(stringResource(id = R.string.multiplication), fontSize=30.sp)
-                }
-            }
-            Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        contentColor = MaterialTheme.colorScheme.onTertiary
-                    ),
-                    onClick = { calculatorViewModel.setNumberOnScreen("4") }) {
-                    AutoResizedText("4", fontSize=30.sp)
-                }
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        contentColor = MaterialTheme.colorScheme.onTertiary
-                    ),
-                    onClick = { calculatorViewModel.setNumberOnScreen("5") }) {
-                    AutoResizedText("5", fontSize=30.sp)
-                }
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        contentColor = MaterialTheme.colorScheme.onTertiary
-                    ),
-                    onClick = { calculatorViewModel.setNumberOnScreen("6") }) {
-                    AutoResizedText("6", fontSize=30.sp)
-                }
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    onClick = { calculatorViewModel.setSymbolOnScreen("-") }) {
-                    AutoResizedText("-", fontSize=30.sp)
-                }
-            }
-            Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        contentColor = MaterialTheme.colorScheme.onTertiary
-                    ),
-                    onClick = { calculatorViewModel.setNumberOnScreen("7") }) {
-                    AutoResizedText("7", fontSize=30.sp)
-                }
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        contentColor = MaterialTheme.colorScheme.onTertiary
-                    ),
-                    onClick = { calculatorViewModel.setNumberOnScreen("8") }) {
-                    AutoResizedText("8", fontSize=30.sp)
-                }
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        contentColor = MaterialTheme.colorScheme.onTertiary
-                    ),
-                    onClick = { calculatorViewModel.setNumberOnScreen("9") }) {
-                    AutoResizedText("9", fontSize=30.sp)
-                }
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    onClick = { calculatorViewModel.setSymbolOnScreen("+") }) {
-                    AutoResizedText("+", fontSize=30.sp)
-                }
-            }
-            Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        contentColor = MaterialTheme.colorScheme.onTertiary
-                    ),
-                    onClick = { calculatorViewModel.setNumberOnScreen("0") }) {
-                    AutoResizedText("0", fontSize=30.sp)
-                }
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    onClick = { calculatorViewModel.changeSign() }) {
-                    AutoResizedText("+/-", fontSize=25.sp)
-                }
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    onClick = { calculatorViewModel.setSymbolOnScreen(".") }) {
-                    AutoResizedText(".", fontSize=30.sp)
-                }
-                Button(
-                    modifier = Modifier
-                        .size(buttonSize, buttonSize)
-                        .padding(2.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    onClick = { calculatorViewModel.calculateResult() }) {
-                    AutoResizedText("=", fontSize=30.sp)
+                Row (modifier = Modifier.fillMaxWidth().weight(1f), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiary,
+                            contentColor = MaterialTheme.colorScheme.onTertiary
+                        ),
+                        onClick = { calculatorViewModel.setNumberOnScreen("0") }) {
+                        AutoResizedText("0", fontSize=60.sp)
+                    }
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        onClick = { calculatorViewModel.changeSign() }) {
+                        AutoResizedText("+/-", fontSize=60.sp)
+                    }
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        onClick = { calculatorViewModel.setSymbolOnScreen(".") }) {
+                        AutoResizedText(".", fontSize=60.sp)
+                    }
+                    Button(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(2.dp),
+                        shape = RoundedCornerShape(15.dp),
+                        onClick = { calculatorViewModel.calculateResult() }) {
+                        AutoResizedText("=", fontSize=60.sp)
+                    }
                 }
             }
         } else {
             Row (modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 85.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
+                .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly) {
                 Column(modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f), verticalArrangement = Arrangement.SpaceEvenly) {
@@ -329,7 +346,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             contentColor = MaterialTheme.colorScheme.onTertiary
                         ),
                         onClick = { calculatorViewModel.setNumberOnScreen("1") }) {
-                        AutoResizedText("1", fontSize=30.sp)
+                        AutoResizedText("1", fontSize=60.sp)
                     }
                     Button(
                         modifier = Modifier
@@ -342,7 +359,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             contentColor = MaterialTheme.colorScheme.onTertiary
                         ),
                         onClick = { calculatorViewModel.setNumberOnScreen("4") }) {
-                        AutoResizedText("4", fontSize=30.sp)
+                        AutoResizedText("4", fontSize=60.sp)
                     }
                     Button(
                         modifier = Modifier
@@ -355,7 +372,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             contentColor = MaterialTheme.colorScheme.onTertiary
                         ),
                         onClick = { calculatorViewModel.setNumberOnScreen("7") }) {
-                        AutoResizedText("7", fontSize=30.sp)
+                        AutoResizedText("7", fontSize=60.sp)
                     }
                 }
                 Column(modifier = Modifier
@@ -372,7 +389,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             contentColor = MaterialTheme.colorScheme.onTertiary
                         ),
                         onClick = { calculatorViewModel.setNumberOnScreen("2") }) {
-                        AutoResizedText("2", fontSize=30.sp)
+                        AutoResizedText("2", fontSize=60.sp)
                     }
                     Button(
                         modifier = Modifier
@@ -385,7 +402,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             contentColor = MaterialTheme.colorScheme.onTertiary
                         ),
                         onClick = { calculatorViewModel.setNumberOnScreen("5") }) {
-                        AutoResizedText("5", fontSize=30.sp)
+                        AutoResizedText("5", fontSize=60.sp)
                     }
                     Button(
                         modifier = Modifier
@@ -398,7 +415,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             contentColor = MaterialTheme.colorScheme.onTertiary
                         ),
                         onClick = { calculatorViewModel.setNumberOnScreen("8") }) {
-                        AutoResizedText("8", fontSize=30.sp)
+                        AutoResizedText("8", fontSize=60.sp)
                     }
                 }
                 Column(modifier = Modifier
@@ -415,7 +432,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             contentColor = MaterialTheme.colorScheme.onTertiary
                         ),
                         onClick = { calculatorViewModel.setNumberOnScreen("3") }) {
-                        AutoResizedText("3", fontSize=30.sp)
+                        AutoResizedText("3", fontSize=60.sp)
                     }
                     Button(
                         modifier = Modifier
@@ -428,7 +445,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             contentColor = MaterialTheme.colorScheme.onTertiary
                         ),
                         onClick = { calculatorViewModel.setNumberOnScreen("6") }) {
-                        AutoResizedText("6", fontSize=30.sp)
+                        AutoResizedText("6", fontSize=60.sp)
                     }
                     Button(
                         modifier = Modifier
@@ -441,7 +458,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             contentColor = MaterialTheme.colorScheme.onTertiary
                         ),
                         onClick = { calculatorViewModel.setNumberOnScreen("9") }) {
-                        AutoResizedText("9", fontSize=30.sp)
+                        AutoResizedText("9", fontSize=60.sp)
                     }
                 }
                 Column(modifier = Modifier
@@ -454,7 +471,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             .weight(1f),
                         shape = RoundedCornerShape(15.dp),
                         onClick = { calculatorViewModel.setSymbolOnScreen("+") }) {
-                        AutoResizedText("+", fontSize=30.sp)
+                        AutoResizedText("+", fontSize=60.sp)
                     }
                     Button(
                         modifier = Modifier
@@ -463,7 +480,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             .weight(1f),
                         shape = RoundedCornerShape(15.dp),
                         onClick = { calculatorViewModel.setSymbolOnScreen("-") }) {
-                        AutoResizedText("-", fontSize=30.sp)
+                        AutoResizedText("-", fontSize=60.sp)
                     }
                     Button(
                         modifier = Modifier
@@ -476,7 +493,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             contentColor = MaterialTheme.colorScheme.onTertiary
                         ),
                         onClick = { calculatorViewModel.setNumberOnScreen("0") }) {
-                        AutoResizedText("0", fontSize=30.sp)
+                        AutoResizedText("0", fontSize=60.sp)
                     }
                 }
                 Column(modifier = Modifier
@@ -489,7 +506,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             .weight(1f),
                         shape = RoundedCornerShape(15.dp),
                         onClick = { calculatorViewModel.setSymbolOnScreen("*") }) {
-                        AutoResizedText(stringResource(id = R.string.multiplication), fontSize=30.sp)
+                        AutoResizedText(stringResource(id = R.string.multiplication), fontSize=60.sp)
                     }
                     Button(
                         modifier = Modifier
@@ -498,7 +515,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             .weight(1f),
                         shape = RoundedCornerShape(15.dp),
                         onClick = { calculatorViewModel.setSymbolOnScreen("/") }) {
-                        AutoResizedText(stringResource(id = R.string.division), fontSize=30.sp)
+                        AutoResizedText(stringResource(id = R.string.division), fontSize=60.sp)
                     }
                     Button(
                         modifier = Modifier
@@ -507,7 +524,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             .weight(1f),
                         shape = RoundedCornerShape(15.dp),
                         onClick = { calculatorViewModel.setSymbolOnScreen(".") }) {
-                        AutoResizedText(".", fontSize=30.sp)
+                        AutoResizedText(".", fontSize=60.sp)
                     }
                 }
                 Column(modifier = Modifier
@@ -520,7 +537,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             .weight(1f),
                         shape = RoundedCornerShape(15.dp),
                         onClick = { calculatorViewModel.square() }) {
-                        AutoResizedText(AnnotatedString("x\u00B2").toString(), fontSize=30.sp)
+                        AutoResizedText(AnnotatedString("x\u00B2").toString(), fontSize=60.sp)
                     }
                     Button(
                         modifier = Modifier
@@ -529,7 +546,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             .weight(1f),
                         shape = RoundedCornerShape(15.dp),
                         onClick = { calculatorViewModel.squareRoot() }) {
-                        AutoResizedText(stringResource(id = R.string.square_root_symbol), fontSize=30.sp)
+                        AutoResizedText(stringResource(id = R.string.square_root_symbol), fontSize=60.sp)
                     }
                     Button(
                         modifier = Modifier
@@ -538,7 +555,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             .weight(1f),
                         shape = RoundedCornerShape(15.dp),
                         onClick = { calculatorViewModel.changeSign() }) {
-                        AutoResizedText("+/-", fontSize=30.sp)
+                        AutoResizedText("+/-", fontSize=60.sp)
                     }
                 }
                 Column(modifier = Modifier
@@ -551,7 +568,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             .weight(0.33f),
                         shape = RoundedCornerShape(15.dp),
                         onClick = { calculatorViewModel.clearScreen() }) {
-                        AutoResizedText("C", fontSize=30.sp)
+                        AutoResizedText("C", fontSize=60.sp)
                     }
                     Button(
                         modifier = Modifier
@@ -560,7 +577,7 @@ fun CalculatorScreen(calculatorViewModel: CalculatorViewModel) {
                             .weight(0.67f),
                         shape = RoundedCornerShape(15.dp),
                         onClick = { calculatorViewModel.calculateResult() }) {
-                        AutoResizedText("=", fontSize=30.sp)
+                        AutoResizedText("=", fontSize=60.sp)
                     }
 
                 }

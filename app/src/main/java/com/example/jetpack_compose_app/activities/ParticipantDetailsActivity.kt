@@ -85,7 +85,7 @@ fun ScreenParticipantDetails(participant: ParticipantDB) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 5.dp)
-                .background(MaterialTheme.colorScheme.secondary, RectangleShape)
+                .background(MaterialTheme.colorScheme.primary, RectangleShape)
                 .padding(5.dp)
         ) {
             Text(
@@ -175,8 +175,7 @@ fun ScreenParticipantDetails(participant: ParticipantDB) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(15.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                    .padding(15.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),

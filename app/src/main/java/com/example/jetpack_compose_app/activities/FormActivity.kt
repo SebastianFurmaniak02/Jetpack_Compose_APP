@@ -180,7 +180,7 @@ fun FormScreen(formViewModel: FormViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = paddingVertical),
-                    value = formScreenInfo.lastName,
+                    value = formScreenInfo.email,
                     singleLine = true,
                     onValueChange = { formViewModel.updateEmail(it) },
                     label = {

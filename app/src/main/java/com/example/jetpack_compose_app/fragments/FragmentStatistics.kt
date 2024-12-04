@@ -47,7 +47,8 @@ fun StatisticsScreen() {
 
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(bottom = 85.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -97,7 +98,7 @@ fun StatisticsScreen() {
                 val skillLevels = listOf("Beginner", "Novice", "Intermediate", "Proficient", "Advanced")
 
                 LazyColumn (
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 100.dp)
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     item {
                         Card(
@@ -111,8 +112,7 @@ fun StatisticsScreen() {
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(15.dp),
-                                verticalArrangement = Arrangement.spacedBy(10.dp)
+                                    .padding(15.dp)
                             ) {
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),

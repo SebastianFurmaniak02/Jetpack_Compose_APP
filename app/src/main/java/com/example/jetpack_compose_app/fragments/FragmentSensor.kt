@@ -62,15 +62,10 @@ fun SensorScreen() {
     if(LocalConfiguration.current.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
         isLandscape = true
     }
-    var size: Dp
-    val density = context.resources.displayMetrics.density
-    size = if (isLandscape) {
-        val pixels = LocalContext.current.resources.displayMetrics.heightPixels
-        (pixels/density).dp / 3
-    } else {
-        val pixels = LocalContext.current.resources.displayMetrics.widthPixels
-        (pixels/density).dp / 2
-    }
+    val size =
+        if (isLandscape) 150.dp
+        else 200.dp
+
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -87,7 +82,7 @@ fun SensorScreen() {
         )
 
         ConstraintLayout(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(bottom = 85.dp),
         ) {
             val (image, outputInfo) = createRefs()
 
@@ -112,7 +107,7 @@ fun SensorScreen() {
             Column(
                 Modifier
                     .background(MaterialTheme.colorScheme.tertiary, RoundedCornerShape(15.dp))
-                    .padding(20.dp)
+                    .padding(10.dp)
                     .constrainAs(outputInfo) {
 
                         if (isLandscape) {
@@ -121,7 +116,7 @@ fun SensorScreen() {
                             end.linkTo(parent.end)
                             bottom.linkTo(parent.bottom)
                         } else {
-                            top.linkTo(parent.top)
+                            top.linkTo(parent.top, 50.dp)
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                             bottom.linkTo(parent.bottom)
@@ -130,11 +125,12 @@ fun SensorScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                 Text(
-                    text = "Output:",
+                    text = "Sensor output:",
                     textAlign = TextAlign.Center,
                     fontSize = 25.sp
                 )
                 LinearProgressIndicator(
+                    modifier = Modifier.padding(10.dp),
                     progress = progress,
                 )
                 Text(
