@@ -58,7 +58,7 @@ class ParticipantDetailsActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        ScreenParticipantDetails(participant)
+                        ParticipantDetailsScreen(participant)
                     }
                 } else {
                     Toast.makeText(this, "Participant doesn't exist.", Toast.LENGTH_SHORT).show()
@@ -72,7 +72,7 @@ class ParticipantDetailsActivity : ComponentActivity() {
 
 
 @Composable
-fun ScreenParticipantDetails(participant: ParticipantDB) {
+fun ParticipantDetailsScreen(participant: ParticipantDB) {
     val context = LocalContext.current
     val openDialog = remember { mutableStateOf(false)  }
     Column(
